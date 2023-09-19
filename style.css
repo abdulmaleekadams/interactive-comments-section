@@ -29,6 +29,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
 }
 
 .commentList,
@@ -42,6 +43,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* transition: all 5s; */
 }
 
 .comment {
@@ -91,7 +93,22 @@ a {
 
 .commentReply {
   display: flex;
+  /* transition: all 0.2s linear; */
   gap: 15px;
+}
+
+.fadeIn {
+  opacity: 1;
+  animation: fadeIn 0.5s linear forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .commentReply img {
@@ -162,7 +179,8 @@ a {
   left: 30px;
 }
 
-#replyTriggerBtn, .likeDislike{
+.replyTriggerBtn,
+.likeDislike {
   position: absolute;
   display: flex;
   align-items: center;
@@ -184,7 +202,7 @@ a {
 }
 
 .likeDislike button,
-#replyTriggerBtn {
+.replyTriggerBtn {
   background: transparent;
   border: none;
   outline: none;
@@ -193,11 +211,11 @@ a {
 
 .likeDislike button {
   font-size: 18px;
-  color: var(--primaryLightGrayishBlue); 
+  color: var(--primaryLightGrayishBlue);
   transition: all 0.3s linear;
 }
 
-.likeDislike button:hover{
+.likeDislike button:hover {
   color: var(--primaryBlue);
 }
 
@@ -206,13 +224,13 @@ a {
   font-weight: 600;
 }
 
-.likeDislike span{
-  font-size: 15px; 
+.likeDislike span {
+  font-size: 15px;
   color: var(--primaryBlue);
   pointer-events: none;
 }
 
-#replyTriggerBtn { 
+.replyTriggerBtn {
   width: max-content;
   right: 20px;
   color: var(--primaryBlue);
@@ -221,9 +239,14 @@ a {
   transition: all 0.3s linear;
 }
 
-#replyTriggerBtn:hover{
+.replyTriggerBtn:hover, .replyTriggerBtn:disabled {
   color: var(--primaryLightGrayishBlue);
 }
+
+.commentReply button:disabled {
+  background: var(--primaryLightGrayishBlue);
+}
+
 
 /* Helpers */
 
