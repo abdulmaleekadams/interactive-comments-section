@@ -1,0 +1,236 @@
+:root {
+  --white: hsl(0, 0%, 100%);
+  --darkBlue: hsl(212, 24%, 26%);
+  --grayishBlue: hsl(211, 10%, 45%);
+  --lightGray: hsl(223, 19%, 93%);
+  --veryLightGray: hsl(228, 33%, 97%);
+
+  --primaryBlue: hsl(238, 40%, 52%);
+  --primarySoftRed: hsl(358, 79%, 66%);
+  --primaryLightGrayishBlue: hsl(239, 57%, 85%);
+  --primaryPaleRed: hsl(357, 100%, 86%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rubik', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  background: var(--veryLightGray);
+  padding: 50px 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.commentList,
+.commentReplyListContainer,
+.commentReplyListCover {
+  display: flex;
+  flex-direction: column;
+}
+
+.commentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment {
+  width: 650px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.commentText p,
+.commentReply .textarea {
+  line-height: 1.5;
+  color: var(--grayishBlue);
+  font-weight: 500;
+  font-size: 0.87rem;
+}
+
+.card {
+  background: var(--white);
+  border-radius: 6px;
+  padding: 20px 45px 25px 80px;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.profile img {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.profile p {
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.profile span {
+  font-size: 15px;
+  color: var(--darkBlue);
+}
+
+.commentReply {
+  display: flex;
+  gap: 15px;
+}
+
+.commentReply img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  position: absolute;
+  left: 25px;
+}
+
+.commentReply .textarea {
+  border: 1px solid var(--grayishBlue);
+  font-family: inherit;
+  font-size: inherit;
+  padding: 12px 16px;
+  display: block;
+  width: 420px;
+  max-width: 500px;
+  overflow: hidden;
+  resize: none;
+  min-height: 90px;
+  max-height: max-content;
+  font-size: 0.87rem;
+  transition: all 0.3s linear;
+  border-radius: 10px;
+}
+
+.commentReply .textarea:focus {
+  outline: none;
+  border-color: var(--primaryBlue);
+}
+
+.commentReply button {
+  all: unset;
+  cursor: pointer;
+  background: var(--primaryBlue);
+  color: var(--white);
+  text-align: center;
+  display: block;
+  width: 90px;
+  height: 40px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.86rem;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.commentReplyListContainer {
+  margin-left: 80px;
+  position: relative;
+}
+
+.commentReplyList {
+  width: 570px;
+}
+
+.commentReplyListCover {
+  flex-direction: row;
+  position: relative;
+}
+
+.line {
+  display: block;
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: var(--lightGray);
+  left: 30px;
+}
+
+#replyTriggerBtn, .likeDislike{
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+/* likeDislike */
+.likeDislike {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 6px;
+  background: var(--lightGray);
+  left: 20px;
+  height: max-content;
+  width: 35px;
+  padding: 6px 0;
+  gap: 10px;
+}
+
+.likeDislike button,
+#replyTriggerBtn {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.likeDislike button {
+  font-size: 18px;
+  color: var(--primaryLightGrayishBlue); 
+  transition: all 0.3s linear;
+}
+
+.likeDislike button:hover{
+  color: var(--primaryBlue);
+}
+
+.likeDislike button,
+.likeDislike span {
+  font-weight: 600;
+}
+
+.likeDislike span{
+  font-size: 15px; 
+  color: var(--primaryBlue);
+  pointer-events: none;
+}
+
+#replyTriggerBtn { 
+  width: max-content;
+  right: 20px;
+  color: var(--primaryBlue);
+  gap: 5px;
+  font-weight: 500;
+  transition: all 0.3s linear;
+}
+
+#replyTriggerBtn:hover{
+  color: var(--primaryLightGrayishBlue);
+}
+
+/* Helpers */
+
+.g-10 {
+  gap: 10px;
+}
+
+.g-20 {
+  gap: 20px;
+}
