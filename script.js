@@ -25,26 +25,19 @@ async function fetchData() {
     if (dataState.loading) {
       console.log('Loading...');
     } else {
-      const commentList = document.getElementById('commentList');
+      const container = document.getElementById('container');
 
       const { comments, currentUser } = dataState.commentData;
-
-      const currentUserReply = `<div class="card commentReply fadeIn">
-<img src="${currentUser.image.webp}" alt= "${currentUser.username}" />
-<div class="textarea" role="textbox" contenteditable title="commentReply">
-  Post your comment
-</div>
-<button type="button">REPLY</button>
-</div>`;
 
       comments.map((comment) => {
         const { content, createdAt, score, replies, user, id } = comment;
         const commentItem = `
+        <div class="commentList g-20" id="commentList-${id}">
         <div class="commentContainer" id = "comment-${id}">
           <div class="post comment card">
             <div class="profile">
               <img src="${user.image.webp}" alt="" />
-              <p class="userName">${user.username}</p>
+              <p class="userName" id="profile-${id}">${user.username}</p>
               <span class="timeStamp">${createdAt}</span>
             </div>
 
@@ -58,17 +51,21 @@ async function fetchData() {
               <span class="count">${score}</span>
               <button class="dislike" type="button">-</button>
             </div>
-            <button class="replyTriggerBtn" type="button" id="commentReplyBtn-${id}">
+            ${
+              currentUser.username !== user.username
+                ? `<button class="replyTriggerBtn" type="button" id="commentReplyBtn-${id}">
               <i class="fa-solid fa-reply"></i>
               Reply
-            </button>
+            </button>`
+                : ''
+            }
           </div>
 
           <!-- List of Replies -->
           <div class="commentReplyListCover">
             <span class="line"></span>
 
-            <div class="commentReplyListContainer g-10">
+            <div class="commentReplyListContainer g-10" id="commentReplyListContainer-${id}">
             ${
               replies
                 ? replies.map(
@@ -76,145 +73,39 @@ async function fetchData() {
                       `<div class="comment commentReplyList card" id="comment-${id}">
               <div class="profile">
                 <img src="${user.image.webp}" alt="${user.username}" />
-                <p class="userName">ramsesmiron</p>
+                <p class="userName" id="profile-${id}">${user.username}</p>
                 <span class="timeStamp">${createdAt}</span>
               </div>
             
               <div class="commentText">
                 <p>
-                  ${content}
+                ${content}
                 </p>
               </div>
               <div class="likeDislike">
-                <button class="like" type="button">+</button>
+              <button class="like" type="button">+</button>
                 <span class="count">${score}</span>
                 <button class="dislike" type="button">-</button>
               </div>
-              <button class="replyTriggerBtn" type="button" id="commentReplyBtn-${id}">
+              ${
+                currentUser.username !== user.username
+                  ? `<button class="replyTriggerBtn" type="button" id="commentReplyBtn-${id}">
                 <i class="fa-solid fa-reply"></i>
                 Reply
-              </button> 
-            </div>`
+              </button> `
+                  : ''
+              } 
+              </div>`
                   )
                 : ''
             }</div>
           </div>
           <!-- List of Replies Ends -->
-        </div>`;
-        commentList.insertAdjacentHTML('beforeend', commentItem);
+          </div></div>`;
+        container.insertAdjacentHTML('beforeend', commentItem);
       });
 
       console.log({ comments: comments, currentUser });
-
-      // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-      // DOM Elements
-      // const postReplyBtn = document.querySelectorAll('.post .replyTriggerBtn');
-      // const repliesListContainer = document.querySelectorAll(
-      //   '.commentReplyListContainer'
-      // );
-      // const replyChildCommentBtn = document.querySelectorAll(
-      //   '.commentReplyListContainer  .textarea + button'
-      // );
-      // // Event listeners
-
-      // // Child Comment reply
-      // replyChildCommentBtn.forEach((post) => {
-      //   const comment = post.previousElementSibling;
-      //   comment.addEventListener('keydown', () => {
-      //     post.disabled = !(
-      //       comment.innerText.trim() !== '' && comment.innerText.length > 10
-      //     );
-      //   });
-
-      //   post.addEventListener('click', () => {
-      //     if (
-      //       comment.innerText.trim() !== '' &&
-      //       comment.innerText.length > 10
-      //     ) {
-      //       post.parentElement.insertAdjacentHTML(
-      //         'beforebegin',
-      //         repliesComponent
-      //       );
-      //       comment.innerText = 'Post your comment';
-      //     }
-      //   });
-      // });
-
-      // // Parent Reply
-      // let id = 0;
-      // postReplyBtn.forEach((replyBtn) => {
-      //   replyBtn.addEventListener('click', (e) => {
-      //     const container = e.target.parentElement.parentElement;
-      //     container.insertAdjacentHTML('afterend', currentUserReply);
-      //     // Disable Comment Reply Trigger Action Button
-      //     e.target.disabled = true;
-      //     const replyParentCommentBtn = document.querySelectorAll(
-      //       '.commentList > .commentReply .textarea + button'
-      //     );
-
-      //     replyParentCommentBtn.forEach((replyBtn) => {
-      //       replyBtn.disabled = true;
-      //       const replyInput = replyBtn.previousElementSibling;
-
-      //       replyInput.addEventListener('keydown', (e) => {
-      //         const currentInput = e.target.innerText;
-      //         replyBtn.disabled = !(
-      //           currentInput.trim() !== '' && currentInput.length > 10
-      //         );
-      //         console.log(currentInput);
-      //       });
-
-      //       replyBtn.addEventListener('click', () => {
-      //         const date = new Date();
-
-      //         const seconds = date.getSeconds();
-
-      //         let createdAt = `${seconds} ${
-      //           seconds > 1 ? 'seconds' : 'second'
-      //         } ago`;
-
-      //         let score = 0;
-
-      //         const childCommentList =
-      //           replyBtn.parentElement.previousElementSibling.lastElementChild
-      //             .lastElementChild;
-      //         console.log(childCommentList);
-      //         if (
-      //           replyInput.innerText.trim() !== '' &&
-      //           replyInput.innerText.length > 10
-      //         ) {
-      //           childCommentList.insertAdjacentHTML(
-      //             'beforeend',
-      //             `<div class="comment commentReplyList card" id="reply-${id}">
-      //             <div class="profile">
-      //               <img src="${currentUser.image.webp}" alt="${currentUser.username}" />
-      //               <p class="userName">ramsesmiron</p>
-      //               <span class="timeStamp">${createdAt}</span>
-      //             </div>
-
-      //             <div class="commentText">
-      //               <p>
-      //                 ${replyInput.innerText}
-      //               </p>
-      //             </div>
-      //             <div class="likeDislike">
-      //               <button class="like" type="button">+</button>
-      //               <span class="count">${score}</span>
-      //               <button class="dislike" type="button">-</button>
-      //             </div>
-      //             <button class="replyTriggerBtn" type="button" id="subReplyBtn-${id}">
-      //               <i class="fa-solid fa-reply"></i>
-      //               Reply
-      //             </button>
-      //           </div>`
-      //           );
-      //           replyInput.innerText = 'Post your comment';
-      //         }
-      //       });
-      //     });
-      //   });
-      // });
 
       // Attach event listeners to top-level comment reply buttons
       document.querySelectorAll('.post .replyTriggerBtn').forEach((button) => {
@@ -227,25 +118,109 @@ async function fetchData() {
         .querySelectorAll('.commentReplyListCover .replyTriggerBtn')
         .forEach((button) => {
           const replyId = button.id.split('-')[1]; // Extract comment ID from button ID
+
           button.addEventListener('click', () => handleReply(replyId));
         });
-
-      let opened = null;
+      // Handle Reply
       const handleReply = (id) => {
         const parentElement = document.getElementById(`comment-${id}`); // Find the parent element
         const buttonElement = document.getElementById(`commentReplyBtn-${id}`); // Find the parent element
         const replyInputs = document.querySelectorAll('.commentReply');
+        let postOwner = document.getElementById(`profile-${id}`).innerText;
+        let content = `<span>@${postOwner}</span>`;
+        let commentList = document.getElementById(`commentList-${id}`);
+        const replyCommentReply = buttonElement.parentElement;
 
-        if (!parentElement) return;
-        console.log(document.querySelectorAll('.commentReply'));
+        const currentUserReply = `<div class="card commentReply fadeIn" id="replyInputContainer${id}">
+<img src="${currentUser.image.webp}" alt= "${currentUser.username}" />
+<div class="textarea" role="textbox" contenteditable title="commentReply" id="postContent-${id}">
+   ${content}
+</div>
+<button type="button" id="postReplyBtn-${id}" disabled>REPLY</button>
+</div>`;
 
-        replyInputs.forEach((notCommentToReply) => (notCommentToReply.style.display = 'none'));
+        replyInputs.forEach((notCommentToReply) => {
+          // notCommentToReply.style.display = 'none';
+          notCommentToReply.parentElement.removeChild(notCommentToReply);
+        });
 
-        // Close the currently open comment input
-        parentElement.insertAdjacentHTML('afterend', currentUserReply);
-        buttonElement.disabled = true
+        // Disable reply button on comment reply
+        document.querySelectorAll('.replyTriggerBtn').forEach((button) => {
+          buttonElement.id === button.id
+            ? (buttonElement.disabled = true)
+            : (button.disabled = false);
+        });
+
+        replyCommentReply.className.includes('commentReplyList')
+          ? replyCommentReply.parentElement.parentElement.parentElement.insertAdjacentHTML(
+              'beforeend',
+              currentUserReply
+            )
+          : commentList.insertAdjacentHTML('beforeend', currentUserReply);
+
+        const postReplyBtn = document.getElementById(`postReplyBtn-${id}`);
+        const postContent = document.getElementById(`postContent-${id}`);
+
+        postContent.addEventListener('keyup', (e) => {
+          content = e.target.innerText;
+          handleContentInput(content);
+        });
+
+        const handleContentInput = (content) => {
+          console.log(content, content.length);
+
+          if (
+            content.trim() !== '' &&
+            (content.length - postOwner.length >= 4 || content.length >= 3)
+          ) {
+            postReplyBtn.disabled = false;
+            return true;
+          } else postReplyBtn.disabled = true;
+        };
+
+        postReplyBtn.addEventListener('click', (e) => handlePost(e, content));
+
+        // Rendering the UI
+
+        const handlePost = (e, content) => {
+          const replyList = document.getElementById(`commentReplyListContainer-${e.target.id.split('-')[1]}`);
+
+          const currentUserReply = `
+                    <div class="comment commentReplyList card" id="comment-${id}">
+            <div class="profile">
+              <img src="${currentUser.image.webp}" alt="${currentUser.username}" />
+              <p class="userName" id="profile-${id}">${currentUser.username}</p>
+              <span class="timeStamp">A week ago</span>
+            </div>
+          
+            <div class="commentText">
+              <p>
+              ${content}
+              </p>
+            </div>
+            <div class="likeDislike">
+            <button class="like" type="button">+</button>
+              <span class="count">0</span>
+              <button class="dislike" type="button">-</button>
+            </div>
+               <button class="replyTriggerBtn" type="button">
+              <i class="fa-solid fa-reply"></i>
+              Reply
+            </button>
+            </div>
+          `;
+
+          if (content === undefined) {
+            postReplyBtn.disabled = true;
+          } else {
+            handleContentInput(content) && console.log(parentElement);
+            replyList.insertAdjacentHTML('beforeend', currentUserReply);
+            console.log(replyList);
+            parentElement.parentElement.removeChild(e.target.parentElement);
+            buttonElement.disabled = false;
+          }
+        };
       };
-
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
