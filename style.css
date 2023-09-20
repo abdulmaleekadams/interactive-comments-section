@@ -67,6 +67,7 @@ a {
   padding: 20px 45px 25px 80px;
   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.15);
   position: relative;
+  min-height: 150px;
 }
 
 .profile {
@@ -93,7 +94,6 @@ a {
 
 .commentReply {
   display: flex;
-  /* transition: all 0.2s linear; */
   gap: 15px;
 }
 
@@ -162,6 +162,10 @@ a {
 }
 
 .commentReplyList {
+  width: 570px;
+}
+
+.commentReplyListContainer .card{
   width: 570px;
 }
 
