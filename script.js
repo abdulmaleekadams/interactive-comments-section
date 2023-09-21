@@ -66,7 +66,16 @@ function createCommentHTML(comment, currentUser) {
                 <i class="fa-solid fa-reply"></i>
                 Reply
               </button>`
-              : ''
+              : `<div class="editDeleteContainer g-20">
+              <button class="editDelete edit" type="button" id="editBtn-${id}">
+                <i class="fa-solid fa-pencil"></i>
+                Edit
+              </button> 
+              <button class="editDelete delete" type="button" id="deleteBtn-${id}">
+                <i class="fa-solid fa-trash"></i>
+                Delete
+              </button> 
+            </div>`
           }
         </div>
 
@@ -104,11 +113,11 @@ function createCommentHTML(comment, currentUser) {
                           Reply
                         </button>`
                         : `<div class="editDeleteContainer g-20">
-                            <button class="editDelete edit" type="button" id="commentEditBtn-${id}">
+                            <button class="editDelete edit" type="button" id="editBtn-${id}">
                               <i class="fa-solid fa-pencil"></i>
                               Edit
                             </button> 
-                            <button class="editDelete delete" type="button" id="commentDeleteBtn-${id}">
+                            <button class="editDelete delete" type="button" id="deleteBtn-${id}">
                               <i class="fa-solid fa-trash"></i>
                               Delete
                             </button> 
@@ -130,7 +139,7 @@ function createCommentHTML(comment, currentUser) {
 // Function to attach event listeners to buttons
 function attachEventListeners() {
   document.querySelectorAll('.edit').forEach((button) => {
-    button.addEventListener('click', () => handleEdit());
+    button.addEventListener('click', (e) => handleEdit(e));
   });
 
   document.querySelectorAll('.delete').forEach((button) => {
@@ -152,18 +161,26 @@ function attachEventListeners() {
 }
 
 // Function to handle editing a comment
-function handleEdit() {
-  // Implementation for editing a comment
+function handleEdit(e) {
+  // contenteditable
+  const post = e.target.parentElement.parentElement;
+  const deleteBtn = post.querySelector('.delete');
+  let commentText = post.querySelector('.commentText p').innerText;
+  e.target.disabled = true;
+  deleteBtn.disabled = true;
 }
 
 // Function to handle deleting a comment
 function handleDelete(e) {
-  const post = e.target.parentElement.parentElement;
-  if (prompt('Are you sure you want to delete this post?') === 'yes') {
-    post.remove();
-    console.log('Deleted');
+  const id = e.target.id.split('-')[1];
+  const postToBeDeleted = document.getElementById(`comment-${id}`);
+  console.log(postToBeDeleted);
+  if (prompt('Are you sure you want to delete this comment? (yes/no)') === 'yes') {
+    postToBeDeleted.remove();
   }
 }
+
+function idGenerator() {}
 
 // Function to handle replying to a comment
 function handleReply(id) {
@@ -208,7 +225,7 @@ function handleReply(id) {
   const postContent = document.getElementById(`postContent-${id}`);
 
   // Scroll to the newly added reply input
-  (postContent.scrollIntoView({ behavior: 'smooth' }));
+  postContent.scrollIntoView({ behavior: 'smooth' });
 
   postContent.addEventListener('keyup', (e) => {
     content = e.target.innerText;
@@ -235,11 +252,18 @@ function handleReply(id) {
       `commentReplyListContainer-${parentElement.id.split('-')[1]}`
     );
 
+    let lastCommentid =
+      replyList.lastElementChild === null
+        ? 0
+        : ++replyList.lastElementChild.id.split('-')[1];
+
     const currentUserReply = `
-      <div class="comment commentReplyList card">
+      <div class="comment commentReplyList card" id="comment-${++lastCommentid}">
         <div class="profile">
           <img src="${currentUser.image.webp}" alt="${currentUser.username}" />
-          <p class="userName" id="profile-${currentUser.username}">${currentUser.username}</p>
+          <p class="userName" id="profile-${currentUser.username}">${
+      currentUser.username
+    }</p>
           <span class="timeStamp">A week ago</span>
         </div>
           
@@ -252,11 +276,11 @@ function handleReply(id) {
           <button class="dislike" type="button">-</button>
         </div>
         <div class="editDeleteContainer g-20">
-          <button class="editDelete edit" type="button" id="commentReplyBtn-${id}">
+          <button class="editDelete edit" type="button" id="editBtn-${lastCommentid}">
             <i class="fa-solid fa-pencil"></i>
             Edit
           </button> 
-          <button class="editDelete delete" type="button" id="commentReplyBtn-${id}">
+          <button class="editDelete delete" type="button" id="deleteBtn-${lastCommentid}">
             <i class="fa-solid fa-trash"></i>
             Delete
           </button> 
@@ -270,12 +294,12 @@ function handleReply(id) {
       parentElement.removeChild(e.target.parentElement);
       buttonElement.disabled = false;
 
-      document.querySelectorAll('.edit').forEach((button) => {
-        button.addEventListener('click', () => handleEdit());
-      });
-      document.querySelectorAll('.delete').forEach((button) => {
-        button.addEventListener('click', (e) => handleDelete(e));
-      });
+      document
+        .getElementById(`deleteBtn-${lastCommentid}`)
+        .addEventListener('click', (e) => handleDelete(e));
+      document
+        .getElementById(`editBtn-${lastCommentid}`)
+        .addEventListener('click', (e) => handleEdit(e));
     }
   };
 }

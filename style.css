@@ -24,13 +24,17 @@ a {
   text-decoration: none;
 }
 
-.container {
+body{
+  min-height: 100vh;
   background: var(--veryLightGray);
+
+}
+
+.container {
   padding: 50px 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
 }
 
 .commentList,
@@ -214,6 +218,10 @@ button {
   cursor: pointer;
 }
 
+button:disabled{
+  cursor: not-allowed;
+}
+
 .likeDislike button {
   font-size: 18px;
   color: var(--primaryLightGrayishBlue);
@@ -272,7 +280,7 @@ button {
 }
 
 .delete:disabled{
-  color: var(--primarySoftRed);
+  color: var(--primaryPaleRed);
 }
 
 
