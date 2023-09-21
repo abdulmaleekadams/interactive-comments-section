@@ -16,6 +16,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Rubik', sans-serif;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -165,7 +166,7 @@ a {
   width: 570px;
 }
 
-.commentReplyListContainer .card{
+.commentReplyListContainer .card {
   width: 570px;
 }
 
@@ -184,7 +185,8 @@ a {
 }
 
 .replyTriggerBtn,
-.likeDislike {
+.likeDislike,
+.editDeleteContainer {
   position: absolute;
   display: flex;
   align-items: center;
@@ -205,8 +207,7 @@ a {
   gap: 10px;
 }
 
-.likeDislike button,
-.replyTriggerBtn {
+button {
   background: transparent;
   border: none;
   outline: none;
@@ -234,7 +235,8 @@ a {
   pointer-events: none;
 }
 
-.replyTriggerBtn {
+.replyTriggerBtn,
+.editDeleteContainer {
   width: max-content;
   right: 20px;
   color: var(--primaryBlue);
@@ -243,12 +245,34 @@ a {
   transition: all 0.3s linear;
 }
 
-.replyTriggerBtn:hover, .replyTriggerBtn:disabled {
+.replyTriggerBtn:hover,
+.replyTriggerBtn:disabled,
+.edit:hover, .edit:disabled{
   color: var(--primaryLightGrayishBlue);
 }
 
-.commentReply button:disabled {
+.commentReply button:disabled,
+.commentReply button:hover {
   background: var(--primaryLightGrayishBlue);
+}
+
+.edit, .delete{
+  transition: all 0.3s linear
+}
+
+.edit {
+  color: var(--primaryBlue);
+}
+.delete {
+  color: var(--primarySoftRed);
+}
+
+.delete:hover {
+  color: var(--primaryPaleRed);
+}
+
+.delete:disabled{
+  color: var(--primarySoftRed);
 }
 
 
