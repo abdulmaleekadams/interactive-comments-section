@@ -124,7 +124,7 @@ body{
   left: 25px;
 }
 
-.commentReply .textarea {
+.commentReply .textarea, .border{
   border: 1px solid var(--grayishBlue);
   font-family: inherit;
   font-size: inherit;
@@ -141,7 +141,7 @@ body{
   border-radius: 10px;
 }
 
-.commentReply .textarea:focus {
+.commentReply .textarea:focus, .border:focus {
   outline: none;
   border-color: var(--primaryBlue);
 }

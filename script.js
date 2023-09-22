@@ -45,7 +45,7 @@ function createCommentHTML(comment, currentUser) {
   const commentItem = `
     <div class="commentList g-20" id="commentList-${id}">
       <div class="commentContainer" id="comment-${id}">
-        <div class="post comment card">
+        <div class="post comment card ${user.username}">
           <div class="profile">
             <img src="${user.image.webp}" alt="" />
             <p class="userName" id="profile-${id}">${user.username}</p>
@@ -89,7 +89,9 @@ function createCommentHTML(comment, currentUser) {
                 ? replies
                     .map(
                       ({ id, content, createdAt, score, user }) => `
-                  <div class="comment commentReplyList card" id="comment-${id}">
+                  <div class="comment commentReplyList card ${
+                    user.username
+                  }" id="comment-${id}">
                     <div class="profile">
                       <img src="${user.image.webp}" alt="${user.username}" />
                       <p class="userName" id="profile-${id}">${
@@ -162,25 +164,63 @@ function attachEventListeners() {
 
 // Function to handle editing a comment
 function handleEdit(e) {
-  // contenteditable
-  const post = e.target.parentElement.parentElement;
-  const deleteBtn = post.querySelector('.delete');
-  let commentText = post.querySelector('.commentText p').innerText;
+  const editBtn = e.target;
+  const id = editBtn.id.split('-')[1];
+  const postToEdit = document.getElementById(`comment-${id}`);
+  const deleteBtn = postToEdit.querySelector('.delete');
+  const commentText = postToEdit.querySelector('.commentText p');
+
+  commentText.contentEditable = true;
+  commentText.classList.add('border');
+  commentText.insertAdjacentHTML(
+    'afterend',
+    `<button class ='updateBtn' id="updatePost-${id}">Update</button>`
+  );
+
+  const updateBtn = postToEdit.querySelector(`#updatePost-${id}`);
+
+  // New text
+  commentText.addEventListener('keyup', () => {
+    handleContentInput(commentText.innerText, updateBtn);
+  });
+
+  updateBtn.addEventListener('click', () => handleUpdate(e));
+
   e.target.disabled = true;
   deleteBtn.disabled = true;
+
+  function handleUpdate(e) {
+    if (handleContentInput(commentText.innerText, e.target)) {
+      commentText.classList.remove('border');
+      commentText.contentEditable = false;
+      editBtn.disabled = false;
+      deleteBtn.disabled = false;
+      updateBtn.remove();
+    }
+    console.log(handleContentInput(commentText.innerText, e.target));
+  }
 }
 
 // Function to handle deleting a comment
 function handleDelete(e) {
   const id = e.target.id.split('-')[1];
   const postToBeDeleted = document.getElementById(`comment-${id}`);
-  console.log(postToBeDeleted);
-  if (prompt('Are you sure you want to delete this comment? (yes/no)') === 'yes') {
+  if (
+    prompt('Are you sure you want to delete this comment? (yes/no)') === 'yes'
+  ) {
     postToBeDeleted.remove();
   }
 }
 
-function idGenerator() {}
+// Reply input checker
+function handleContentInput(content, actionButton) {
+  if (content.trim().length >= 2) {
+    actionButton.disabled = false;
+    return true;
+  } else {
+    actionButton.disabled = true;
+  }
+}
 
 // Function to handle replying to a comment
 function handleReply(id) {
@@ -229,17 +269,8 @@ function handleReply(id) {
 
   postContent.addEventListener('keyup', (e) => {
     content = e.target.innerText;
-    handleContentInput(content);
+    handleContentInput(content, postReplyBtn);
   });
-
-  // Reply input checker
-  const handleContentInput = (content) => {
-    if (content.trim().length >= 2) {
-      postReplyBtn.disabled = false;
-    } else {
-      postReplyBtn.disabled = true;
-    }
-  };
 
   // Add event listener to send comment button
   postReplyBtn.addEventListener('click', (e) => handlePost(e, content));
@@ -258,7 +289,9 @@ function handleReply(id) {
         : ++replyList.lastElementChild.id.split('-')[1];
 
     const currentUserReply = `
-      <div class="comment commentReplyList card" id="comment-${++lastCommentid}">
+      <div class="comment commentReplyList card ${
+        currentUser.username
+      }" id="comment-${++lastCommentid}">
         <div class="profile">
           <img src="${currentUser.image.webp}" alt="${currentUser.username}" />
           <p class="userName" id="profile-${currentUser.username}">${
@@ -290,10 +323,13 @@ function handleReply(id) {
     if (content === undefined) {
       postReplyBtn.disabled = true;
     } else {
-      replyList.insertAdjacentHTML('beforeend', currentUserReply);
-      parentElement.removeChild(e.target.parentElement);
-      buttonElement.disabled = false;
-
+      if (handleContentInput(postContent.innerText, postReplyBtn)) {
+        replyList.insertAdjacentHTML('beforeend', currentUserReply);
+        parentElement.removeChild(e.target.parentElement);
+        buttonElement.disabled = false;
+      } else {
+        alert("Can't be empty");
+      }
       document
         .getElementById(`deleteBtn-${lastCommentid}`)
         .addEventListener('click', (e) => handleDelete(e));
