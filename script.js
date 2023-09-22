@@ -56,9 +56,9 @@ function createCommentHTML(comment, currentUser) {
             <p>${content}</p>
           </div>
           <div class="likeDislike">
-            <button class="like" type="button">+</button>
-            <span class="count">${score}</span>
-            <button class="dislike" type="button">-</button>
+            <button class="like" type="button" id="like-${id}">+</button>
+            <span class="count" id="score-${id}">${score}</span>
+            <button class="dislike" type="button" id="dislike-${id}">-</button>
           </div>
           ${
             currentUser.username !== user.username
@@ -104,9 +104,9 @@ function createCommentHTML(comment, currentUser) {
                       <p>${content}</p>
                     </div>
                     <div class="likeDislike">
-                      <button class="like" type="button">+</button>
-                      <span class="count">${score}</span>
-                      <button class="dislike" type="button">-</button>
+                      <button class="like" type="button" id="like-${id}">+</button>
+                      <span class="count" id="score-${id}">${score}</span>
+                      <button class="dislike" type="button" id="dislike-${id}">-</button>
                     </div>
                     ${
                       currentUser.username !== user.username
@@ -160,6 +160,15 @@ function attachEventListeners() {
       const replyId = button.id.split('-')[1];
       button.addEventListener('click', () => handleReply(replyId));
     });
+
+  document.querySelectorAll('.like').forEach((button) => {
+    const likeId = button.id.split('-')[1];
+    button.addEventListener('click', () => handleLike(likeId));
+  });
+  document.querySelectorAll('.dislike').forEach((button) => {
+    const dislikeId = button.id.split('-')[1];
+    button.addEventListener('click', () => handleDislike(dislikeId));
+  });
 }
 
 // Function to handle editing a comment
@@ -209,6 +218,23 @@ function handleDelete(e) {
     prompt('Are you sure you want to delete this comment? (yes/no)') === 'yes'
   ) {
     postToBeDeleted.remove();
+  }
+}
+
+function handleLike(e) {
+  if (!document.getElementById(`like-${e}`).disabled) {
+    let score = document.getElementById(`score-${e}`);
+    score.innerText = Number(score.innerText) + 1;
+    document.getElementById(`like-${e}`).disabled = true;
+    document.getElementById(`dislike-${e}`).disabled = false;
+  }
+}
+function handleDislike(e) {
+  if (!document.getElementById(`dislike-${e}`).disabled) {
+    let score = document.getElementById(`score-${e}`);
+    score.innerText = Number(score.innerText) - 1;
+    document.getElementById(`dislike-${e}`).disabled = true;
+    document.getElementById(`like-${e}`).disabled = false;
   }
 }
 
@@ -304,9 +330,9 @@ function handleReply(id) {
           <p>${content}</p>
         </div>
         <div class="likeDislike">
-          <button class="like" type="button">+</button>
-          <span class="count">0</span>
-          <button class="dislike" type="button">-</button>
+          <button class="like" type="button" id="like-${lastCommentid}">+</button>
+          <span class="count" id="score-${lastCommentid}">0</span>
+          <button class="dislike" type="button" id="dislike-${lastCommentid}">-</button>
         </div>
         <div class="editDeleteContainer g-20">
           <button class="editDelete edit" type="button" id="editBtn-${lastCommentid}">
@@ -327,15 +353,23 @@ function handleReply(id) {
         replyList.insertAdjacentHTML('beforeend', currentUserReply);
         parentElement.removeChild(e.target.parentElement);
         buttonElement.disabled = false;
+        document
+          .getElementById(`deleteBtn-${lastCommentid}`)
+          .addEventListener('click', (e) => handleDelete(e));
+        document
+          .getElementById(`editBtn-${lastCommentid}`)
+          .addEventListener('click', (e) => handleEdit(e));
+
+        document
+          .getElementById(`like-${lastCommentid}`)
+          .addEventListener('click', () => handleLike(lastCommentid));
+        
+        document
+          .getElementById(`dislike-${lastCommentid}`)
+          .addEventListener('click', () => handleDislike(lastCommentid));
       } else {
         alert("Can't be empty");
       }
-      document
-        .getElementById(`deleteBtn-${lastCommentid}`)
-        .addEventListener('click', (e) => handleDelete(e));
-      document
-        .getElementById(`editBtn-${lastCommentid}`)
-        .addEventListener('click', (e) => handleEdit(e));
     }
   };
 }
