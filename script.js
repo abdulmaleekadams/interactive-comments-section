@@ -214,11 +214,21 @@ function handleEdit(e) {
 function handleDelete(e) {
   const id = e.target.id.split('-')[1];
   const postToBeDeleted = document.getElementById(`comment-${id}`);
-  if (
-    prompt('Are you sure you want to delete this comment? (yes/no)') === 'yes'
-  ) {
-    postToBeDeleted.remove();
-  }
+
+  getDeleteConfirmation(function (response) {
+    if (response === 'yes') {
+      const deleteConfirmContainer = document.querySelector(
+        '.deleteConfirmContainer'
+      );
+      deleteConfirmContainer.remove();
+      postToBeDeleted.remove();
+    } else if (response === 'no') {
+      const deleteConfirmContainer = document.querySelector(
+        '.deleteConfirmContainer'
+      );
+      deleteConfirmContainer.remove();
+    }
+  });
 }
 
 function handleLike(e) {
@@ -363,7 +373,7 @@ function handleReply(id) {
         document
           .getElementById(`like-${lastCommentid}`)
           .addEventListener('click', () => handleLike(lastCommentid));
-        
+
         document
           .getElementById(`dislike-${lastCommentid}`)
           .addEventListener('click', () => handleDislike(lastCommentid));
@@ -372,6 +382,32 @@ function handleReply(id) {
       }
     }
   };
+}
+
+function getDeleteConfirmation(callback) {
+  document.getElementById('container').insertAdjacentHTML(
+    'beforeEnd',
+    `<div class="deleteConfirmContainer">
+  <div class="card deleteConfirm">
+    <h3>Delete comment</h3>
+    <p>
+      Are you sure you want to delete this comment? This will remove the
+      comment and can't be undone
+    </p>
+    <div class="confirmOption" id='confirmOption'>
+      <button id='no'>NO,CANCEL</button>
+      <button id='yes'>YES, DELETE</button>
+    </div>
+  </div>
+</div>`
+  );
+  const confirmOption = document.getElementById('confirmOption');
+  confirmOption.addEventListener('click', (e) => {
+    const buttonId = e.target.id;
+    if (callback && typeof callback === 'function') {
+      callback(buttonId);
+    }
+  });
 }
 
 // Call the fetchData function when you want to initiate the data fetch

@@ -301,6 +301,46 @@ button:disabled {
   padding: 12px 16px;
 }
 
+.deleteConfirmContainer {
+  height: 100%;
+  background: rgba(255, 0, 0, 0.062);
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteConfirm {
+  max-width: 370px;
+  padding: 25px !important;
+  line-height: 1.5;
+}
+
+.deleteConfirm p {
+  margin: 20px 0;
+}
+
+.confirmOption {
+  display: flex;
+  gap: 20px;
+}
+
+.confirmOption button {
+  background: var(--grayishBlue);
+  width: 100%;
+  padding: 13px 0;
+  border-radius: 10px;
+  color: var(--white);
+}
+
+.confirmOption button:nth-child(2) {
+  background: var(--primarySoftRed);
+}
+
 /* Helpers */
 
 .g-10 {
