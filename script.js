@@ -327,7 +327,7 @@ function handleReply(id) {
     const currentUserReply = `
       <div class="comment commentReplyList card ${
         currentUser.username
-      }" id="comment-${++lastCommentid}">
+      }" id="comment-${lastCommentid}">
         <div class="profile">
           <img src="${currentUser.image.webp}" alt="${currentUser.username}" />
           <p class="userName" id="profile-${currentUser.username}">${

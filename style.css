@@ -25,7 +25,7 @@ a {
 }
 
 body {
-  min-height: 100vh;
+  /* min-height: 100vh; */
   background: var(--veryLightGray);
 }
 
@@ -302,7 +302,7 @@ button:disabled {
 }
 
 .deleteConfirmContainer {
-  height: 100%;
+  height: 100vh;
   background: rgba(255, 0, 0, 0.062);
   width: 100%;
   position: absolute;
@@ -312,6 +312,7 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .deleteConfirm {
@@ -339,6 +340,12 @@ button:disabled {
 
 .confirmOption button:nth-child(2) {
   background: var(--primarySoftRed);
+}
+
+body:has(.deleteConfirmContainer),
+#container:has(.deleteConfirmContainer) {
+  overflow-y: hidden;
+  height: 100vh;
 }
 
 /* Helpers */
@@ -403,5 +410,20 @@ button:disabled {
   }
   .line {
     left: 0;
+  }
+}
+
+@media screen and (max-width: 579px) {
+  .container {
+    padding: 50px 15px;
+  }
+  .comment,
+  .commentReply .textarea,
+  .commentReplyListContainer,
+  .commentReplyListContainer .card {
+    width: 100%;
+  }
+  .commentReplyListContainer {
+    margin-left: 10px;
   }
 }
